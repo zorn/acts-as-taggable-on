@@ -50,7 +50,11 @@ module ActsAsTaggableOn
         raise "No context :#{opts[:on]} defined in #{taggable.class.to_s}" unless (opts[:force] || taggable.tag_types.include?(opts[:on]))
 
         taggable.set_owner_tag_list_on(self, opts[:on].to_s, opts[:with])
-        taggable.save
+        
+        unless opts[:delay_save_on_tagged_object] == true
+          taggable.save
+        end
+        
       end
 
       def is_tagger?
